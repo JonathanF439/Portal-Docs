@@ -10,7 +10,7 @@ interface LoginProps {
 
 export const Login: React.FC<LoginProps> = ({ setView }) => {
   const { mutate: login, isPending: isLoading } = useLogin();
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -23,10 +23,10 @@ export const Login: React.FC<LoginProps> = ({ setView }) => {
       return;
     }
     setError('');
-    
-    // Sempre loga como fornecedor por padrão
-    const role = UserRole.SUPPLIER;
-    
+
+    // CORREÇÃO: Define a role baseada no email digitado
+    const role = email.includes('admin') ? UserRole.ADMIN : UserRole.SUPPLIER;
+
     login({ email, password, role }, {
       onError: (err) => {
         setError(err.message || 'Erro ao tentar login.');
@@ -34,10 +34,17 @@ export const Login: React.FC<LoginProps> = ({ setView }) => {
     });
   };
 
-  const prefillDemo = () => {
+  const prefillSupplier = () => {
     setError('');
     setEmail('joao@tech.com');
     setPassword('123456');
+  };
+
+  // Nova função para preencher como admin
+  const prefillAdmin = () => {
+    setError('');
+    setEmail('admin@aurora.com'); 
+    setPassword('admin123');
   };
 
   return (
@@ -47,7 +54,7 @@ export const Login: React.FC<LoginProps> = ({ setView }) => {
 
         <div className="absolute top-20 right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
-        
+
         <div className="relative z-10">
           <div className="mb-8">
             <Logo size="lg" />
@@ -91,11 +98,11 @@ export const Login: React.FC<LoginProps> = ({ setView }) => {
             <form onSubmit={handleLogin} className="space-y-5">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">E-mail</label>
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="seu@email.com" 
+                  placeholder="seu@email.com"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition-all bg-white"
                 />
               </div>
@@ -103,14 +110,14 @@ export const Login: React.FC<LoginProps> = ({ setView }) => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Senha</label>
                 <div className="relative">
-                  <input 
-                    type={showPassword ? "text" : "password"} 
+                  <input
+                    type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••" 
+                    placeholder="••••••••"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition-all pr-11 bg-white"
                   />
-                  <button 
+                  <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
@@ -121,7 +128,7 @@ export const Login: React.FC<LoginProps> = ({ setView }) => {
               </div>
 
               <div className="flex items-center justify-end">
-                <button 
+                <button
                   type="button"
                   className="text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors"
                 >
@@ -149,7 +156,7 @@ export const Login: React.FC<LoginProps> = ({ setView }) => {
               <p className="text-sm text-gray-500 text-center mb-3">
                 Sua empresa ainda não tem cadastro?
               </p>
-              <button 
+              <button
                 onClick={() => setView('register')}
                 className="w-full py-3 border-2 border-gray-200 text-gray-700 rounded-lg font-medium hover:border-primary-500 hover:text-primary-600 hover:bg-primary-50 transition-all"
               >
@@ -162,12 +169,20 @@ export const Login: React.FC<LoginProps> = ({ setView }) => {
               <p className="text-xs text-gray-400 uppercase font-semibold text-center mb-3 tracking-wider">
                 Para demonstração
               </p>
-              <button
-                onClick={prefillDemo}
-                className="w-full text-xs py-2.5 px-3 bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-700 rounded-lg border border-gray-200 hover:border-blue-300 transition-all"
-              >
-                Preencher com dados demo
-              </button>
+              <div className="flex gap-2"> {/* Use flex para colocar lado a lado */}
+                <button
+                  onClick={prefillSupplier}
+                  className="w-1/2 text-xs py-2.5 px-3 bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-700 rounded-lg border border-gray-200 hover:border-blue-300 transition-all"
+                >
+                  Demo Fornecedor
+                </button>
+                <button
+                  onClick={prefillAdmin}
+                  className="w-1/2 text-xs py-2.5 px-3 bg-purple-50 hover:bg-purple-100 text-purple-600 hover:text-purple-700 rounded-lg border border-purple-200 hover:border-purple-300 transition-all"
+                >
+                  Demo Admin
+                </button>
+              </div>
             </div>
           </div>
         </div>

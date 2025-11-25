@@ -85,7 +85,7 @@ export const ModulesPage: React.FC = () => {
         {/* Footer Info */}
         <div className="mt-12 text-center">
           <p className="text-xs text-gray-400">
-            © 2025 Aurora EADI - Matriz São Paulo | Versão do Sistema: v2.5.4
+            © 2025 Aurora EADI - Matriz Manaus | Versão do Sistema: v1.0.0
           </p>
         </div>
       </div>
