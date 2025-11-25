@@ -1,14 +1,24 @@
 'use client'
 import React from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuthContext } from '../../context/AuthContext';
-import { LogOut, FileText, Shield, User as UserIcon, Menu } from 'lucide-react';
+import { LogOut, FileText, Shield, User as UserIcon, Home } from 'lucide-react';
 import { UserRole } from '../../types';
 import { Logo } from '../ui/Logo';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { currentUser, logoutUser } = useAuthContext();
+  const router = useRouter();
+  const pathname = usePathname();
 
   if (!currentUser) return <>{children}</>;
+
+  const handleLogout = () => {
+    logoutUser();
+    router.push('/');
+  };
+
+  const isActive = (path: string) => pathname === path;
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gray-50">
@@ -32,24 +42,59 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           </div>
 
           <nav className="space-y-2">
+            {/* Módulos Home */}
+            <button
+              onClick={() => router.push('/modules')}
+              className={`
+                w-full flex items-center gap-3 px-4 py-2.5 rounded-md font-medium transition-colors
+                ${isActive('/modules')
+                  ? 'bg-primary-100 text-primary-700'
+                  : 'text-gray-700 hover:bg-gray-100'
+                }
+              `}
+            >
+              <Home size={18} />
+              Módulos
+            </button>
+
+            {/* Menu Atual (Admin ou Supplier) */}
             {currentUser.role === UserRole.ADMIN && (
-              <div className="flex items-center gap-3 px-4 py-2.5 text-gray-700 bg-gray-100 rounded-md font-medium">
+              <button
+                onClick={() => router.push('/admin')}
+                className={`
+                  w-full flex items-center gap-3 px-4 py-2.5 rounded-md font-medium transition-colors
+                  ${isActive('/admin')
+                    ? 'bg-primary-100 text-primary-700'
+                    : 'text-gray-700 hover:bg-gray-100'
+                  }
+                `}
+              >
                 <Shield size={18} />
-                Moderação
-              </div>
+                Gestão de Compras
+              </button>
             )}
+
             {currentUser.role === UserRole.SUPPLIER && (
-              <div className="flex items-center gap-3 px-4 py-2.5 text-gray-700 bg-gray-100 rounded-md font-medium">
+              <button
+                onClick={() => router.push('/supplier')}
+                className={`
+                  w-full flex items-center gap-3 px-4 py-2.5 rounded-md font-medium transition-colors
+                  ${isActive('/supplier')
+                    ? 'bg-primary-100 text-primary-700'
+                    : 'text-gray-700 hover:bg-gray-100'
+                  }
+                `}
+              >
                 <FileText size={18} />
                 Meus Documentos
-              </div>
+              </button>
             )}
           </nav>
         </div>
 
         <div className="mt-auto p-4 border-t border-gray-100">
           <button 
-            onClick={logoutUser} 
+            onClick={handleLogout}
             className="w-full flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
           >
             <LogOut size={18} />

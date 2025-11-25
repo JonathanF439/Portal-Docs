@@ -14,11 +14,7 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!isLoading && currentUser) {
-      if (currentUser.role === UserRole.ADMIN) {
-        router.push('/admin')
-      } else {
-        router.push('/supplier')
-      }
+      router.push('/modules')
     }
   }, [currentUser, isLoading, router])
 

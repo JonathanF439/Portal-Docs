@@ -1,0 +1,94 @@
+'use client'
+
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/context/AuthContext';
+import { ModuleCard } from './ModuleCard';
+import { Truck, FileText, ShoppingCart } from 'lucide-react';
+import { UserRole } from '@/types/'
+
+export const ModulesPage: React.FC = () => {
+  const router = useRouter();
+  const { currentUser } = useAuthContext();
+
+  const modules = [
+    {
+      icon: Truck,
+      title: 'Logística & Operações',
+      description: 'Gestão completa de armazém alfandegado (WMS), monitoramento de frota e processos de importação/exportação.',
+      route: '/logistics',
+      roles: [UserRole.ADMIN]
+    },
+    {
+      icon: FileText,
+      title: 'Faturamento',
+      description: 'Emissão de notas fiscais, controle de contas a receber, fluxo de caixa e relatórios financeiros consolidados.',
+      route: '/billing',
+      roles: [UserRole.ADMIN]
+    },
+    {
+      icon: ShoppingCart,
+      title: 'Gestão de Compras',
+      description: 'Homologação de fornecedores, cotações, pedidos de compra e controle de estoque de materiais de uso e consumo.',
+      route: currentUser?.role === UserRole.ADMIN ? '/admin' : '/supplier',
+      roles: [UserRole.ADMIN, UserRole.SUPPLIER]
+    }
+  ];
+
+  const handleModuleClick = (route: string) => {
+    router.push(route);
+  };
+
+  const canAccessModule = (moduleRoles: UserRole[]) => {
+    return currentUser && moduleRoles.includes(currentUser.role);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-12 text-center">
+          <h1 className="text-3xl font-bold text-gray-900 mb-3">
+            Módulos do Sistema
+          </h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Selecione o ambiente operacional que deseja acessar.
+          </p>
+        </div>
+
+        {/* Data Atual */}
+        <div className="mb-8 text-center">
+          <p className="text-sm text-gray-500 uppercase tracking-wide">
+            {new Date().toLocaleDateString('pt-BR', { 
+              weekday: 'long', 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}
+          </p>
+        </div>
+
+        {/* Grid de Módulos */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {modules.map((module) => (
+            <ModuleCard
+              key={module.route}
+              icon={module.icon}
+              title={module.title}
+              description={module.description}
+              onClick={() => handleModuleClick(module.route)}
+              disabled={!canAccessModule(module.roles)}
+            />
+          ))}
+        </div>
+
+        {/* Footer Info */}
+        <div className="mt-12 text-center">
+          <p className="text-xs text-gray-400">
+            © 2025 Aurora EADI - Matriz São Paulo | Versão do Sistema: v2.5.4
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
