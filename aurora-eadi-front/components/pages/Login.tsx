@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLogin } from '../../hooks/useAuth';
 import { UserRole } from '../../types';
-import { ShieldCheck, Briefcase, Loader2, LogIn, Eye, EyeOff, Info, AlertCircle as AlertIcon } from 'lucide-react';
+import { Loader2, Eye, EyeOff, AlertCircle as AlertIcon } from 'lucide-react';
 import { Logo } from '../ui/Logo';
 
 interface LoginProps {
@@ -11,7 +11,6 @@ interface LoginProps {
 export const Login: React.FC<LoginProps> = ({ setView }) => {
   const { mutate: login, isPending: isLoading } = useLogin();
   
-  const [activeTab, setActiveTab] = useState<'supplier' | 'admin'>('supplier');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -25,7 +24,8 @@ export const Login: React.FC<LoginProps> = ({ setView }) => {
     }
     setError('');
     
-    const role = activeTab === 'admin' ? UserRole.ADMIN : UserRole.SUPPLIER;
+    // Sempre loga como fornecedor por padrão
+    const role = UserRole.SUPPLIER;
     
     login({ email, password, role }, {
       onError: (err) => {
@@ -34,151 +34,142 @@ export const Login: React.FC<LoginProps> = ({ setView }) => {
     });
   };
 
-  const prefillDemo = (type: 'supplier' | 'admin') => {
+  const prefillDemo = () => {
     setError('');
-    if (type === 'supplier') {
-      setActiveTab('supplier');
-      setEmail('joao@tech.com');
-      setPassword('123456');
-    } else {
-      setActiveTab('admin');
-      setEmail('admin@docflow.com');
-      setPassword('123456');
-    }
+    setEmail('joao@tech.com');
+    setPassword('123456');
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+    <div className="min-h-screen flex">
+      {/* Lado Esquerdo - Laranja com Logo e Texto */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary-500 to-primary-600 p-12 flex-col justify-between relative overflow-hidden">
+        {/* Círculos decorativos de fundo */}
+        <div className="absolute top-20 right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
         
-        <div className="p-8 pb-6 flex flex-col items-center">
-          <div className="scale-125 mb-2">
+        <div className="relative z-10">
+          <div className="mb-8">
             <Logo size="lg" />
           </div>
-          <p className="text-gray-500 mt-4 text-sm">Portal de Gestão de Documentos</p>
         </div>
 
-        {/* Tabs */}
-        <div className="flex border-b border-gray-200">
-          <button
-            onClick={() => { setActiveTab('supplier'); setError(''); }}
-            className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
-              activeTab === 'supplier' 
-                ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50/30' 
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <Briefcase size={18} />
-            Sou Fornecedor
-          </button>
-          <button
-            onClick={() => { setActiveTab('admin'); setError(''); }}
-            className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
-              activeTab === 'admin' 
-                ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50/30' 
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <ShieldCheck size={18} />
-            Administrador
-          </button>
+        <div className="relative z-10 max-w-md">
+          <h1 className="text-4xl font-bold text-white mb-4 leading-tight">
+            Logística Integrada e Inteligente
+          </h1>
+          <p className="text-white/90 text-lg">
+            Controle total sobre armazém alfandegado, frota e operações de comércio exterior.
+          </p>
         </div>
 
-        <div className="p-8 pt-6">
-          {error && (
-            <div className="mb-6 p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100 flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
-              <AlertIcon size={16} className="shrink-0" /> <span>{error}</span>
-            </div>
-          )}
+        <div className="relative z-10 text-white/70 text-sm">
+          © 2025 Aurora EADI. Todos os direitos reservados.
+        </div>
+      </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-              <input 
-                type="email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={activeTab === 'supplier' ? "seu@email.com" : "admin@docflow.com"} 
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition-all"
-              />
+      {/* Lado Direito - Formulário de Login */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+        <div className="w-full max-w-md">
+          {/* Logo mobile */}
+          <div className="lg:hidden mb-8 flex justify-center">
+            <Logo size="md" />
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Bem-vindo de volta</h2>
+              <p className="text-gray-500 text-sm">Acesse sua conta para gerenciar operações logísticas</p>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
-              <div className="relative">
+            {error && (
+              <div className="mb-6 p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100 flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
+                <AlertIcon size={16} className="shrink-0" /> <span>{error}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleLogin} className="space-y-5">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">E-mail</label>
                 <input 
-                  type={showPassword ? "text" : "password"} 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••" 
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition-all pr-10"
+                  type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="seu@email.com" 
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition-all bg-white"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Senha</label>
+                <div className="relative">
+                  <input 
+                    type={showPassword ? "text" : "password"} 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••" 
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition-all pr-11 bg-white"
+                  />
+                  <button 
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end">
                 <button 
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors"
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  Esqueceu sua senha?
                 </button>
               </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full py-3 bg-primary-600 text-white rounded-lg font-medium transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary-200 hover:bg-primary-700 hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="animate-spin" size={20} />
+                    Entrando...
+                  </>
+                ) : (
+                  'Acessar Portal'
+                )}
+              </button>
+            </form>
+
+            <div className="mt-8 pt-6 border-t border-gray-100">
+              <p className="text-sm text-gray-500 text-center mb-3">
+                Sua empresa ainda não tem cadastro?
+              </p>
+              <button 
+                onClick={() => setView('register')}
+                className="w-full py-3 border-2 border-gray-200 text-gray-700 rounded-lg font-medium hover:border-primary-500 hover:text-primary-600 hover:bg-primary-50 transition-all"
+              >
+                Cadastrar Fornecedor
+              </button>
             </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className={`w-full py-2.5 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-md ${
-                activeTab === 'supplier' 
-                  ? 'bg-primary-600 hover:bg-primary-700 shadow-primary-200' 
-                  : 'bg-purple-600 hover:bg-purple-700 shadow-purple-200'
-              } disabled:opacity-60 disabled:cursor-not-allowed`}
-            >
-              {isLoading ? <Loader2 className="animate-spin" size={20} /> : (
-                 <>
-                   <LogIn size={18} />
-                   {activeTab === 'supplier' ? 'Entrar como Fornecedor' : 'Acessar Painel Admin'}
-                 </>
-              )}
-            </button>
-          </form>
-          
-          {activeTab === 'supplier' && (
-            <>
-              <p className="text-xs text-gray-400 mt-4 text-center flex items-center justify-center gap-1">
-                <Info size={12} />
-                Novos cadastros requerem aprovação do Admin.
+            {/* Demo Section */}
+            <div className="mt-6 pt-6 border-t border-gray-100">
+              <p className="text-xs text-gray-400 uppercase font-semibold text-center mb-3 tracking-wider">
+                Para demonstração
               </p>
-
-              <div className="mt-8 pt-6 border-t border-gray-100 text-center">
-                <p className="text-sm text-gray-500">Sua empresa ainda não tem cadastro?</p>
-                <button 
-                  onClick={() => setView('register')}
-                  className="mt-1 text-primary-600 font-semibold hover:text-primary-700 transition-colors"
-                >
-                  Cadastrar Fornecedor
-                </button>
-              </div>
-            </>
-          )}
-
-          {/* Demo Section */}
-          <div className="mt-8 pt-6 border-t border-gray-100">
-            <p className="text-xs text-gray-400 uppercase font-semibold text-center mb-3 tracking-wider">Credenciais de Demonstração</p>
-            <div className="flex gap-3">
               <button
-                 onClick={() => prefillDemo('supplier')}
-                 className="flex-1 text-xs py-2 px-3 bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-700 rounded border border-gray-200 transition-colors text-center"
+                onClick={prefillDemo}
+                className="w-full text-xs py-2.5 px-3 bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-700 rounded-lg border border-gray-200 hover:border-blue-300 transition-all"
               >
-                Preencher Fornecedor
-              </button>
-              <button
-                 onClick={() => prefillDemo('admin')}
-                 className="flex-1 text-xs py-2 px-3 bg-gray-50 hover:bg-purple-50 text-gray-600 hover:text-purple-700 rounded border border-gray-200 transition-colors text-center"
-              >
-                Preencher Admin
+                Preencher com dados demo
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </div>
