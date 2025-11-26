@@ -1,8 +1,17 @@
+'use client';
+
 import React, { useState } from 'react';
 import { useLogin } from '../../hooks/useAuth';
 import { UserRole } from '../../types';
-import { Loader2, Eye, EyeOff, AlertCircle as AlertIcon } from 'lucide-react';
+import { Loader2, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { Logo } from '../ui/Logo';
+
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Separator } from "@/components/ui/separator";
 
 interface LoginProps {
   setView: (v: 'login' | 'register') => void;
@@ -18,13 +27,14 @@ export const Login: React.FC<LoginProps> = ({ setView }) => {
 
   const handleLogin = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+
     if (!email || !password) {
       setError('Preencha e-mail e senha.');
       return;
     }
+
     setError('');
 
-    // CORREÇÃO: Define a role baseada no email digitado
     const role = email.includes('admin') ? UserRole.ADMIN : UserRole.SUPPLIER;
 
     login({ email, password, role }, {
@@ -34,24 +44,16 @@ export const Login: React.FC<LoginProps> = ({ setView }) => {
     });
   };
 
-  const prefillSupplier = () => {
-    setError('');
-    setEmail('joao@tech.com');
-    setPassword('123456');
-  };
-
-  // Nova função para preencher como admin
   const prefillAdmin = () => {
     setError('');
-    setEmail('admin@aurora.com'); 
-    setPassword('admin123');
+    setEmail('admin@docflow.com');
+    setPassword('123456');
   };
 
   return (
     <div className="min-h-screen flex">
-      {/* Lado Esquerdo */}
+      {/* LADO ESQUERDO */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary-500 to-primary-600 p-12 flex-col justify-between relative overflow-hidden">
-
         <div className="absolute top-20 right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
 
@@ -75,116 +77,116 @@ export const Login: React.FC<LoginProps> = ({ setView }) => {
         </div>
       </div>
 
-      {/* Lado Direito - Formulário de Login */}
+      {/* LADO DIREITO */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
         <div className="w-full max-w-md">
-          {/* Logo mobile */}
+
           <div className="lg:hidden mb-8 flex justify-center">
             <Logo size="md" />
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Bem-vindo de volta</h2>
-              <p className="text-gray-500 text-sm">Acesse sua conta para gerenciar operações logísticas</p>
-            </div>
-
-            {error && (
-              <div className="mb-6 p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100 flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
-                <AlertIcon size={16} className="shrink-0" /> <span>{error}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleLogin} className="space-y-5">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">E-mail</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="seu@email.com"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition-all bg-white"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Senha</label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition-all pr-11 bg-white"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-end">
-                <button
-                  type="button"
-                  className="text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors"
-                >
-                  Esqueceu sua senha?
-                </button>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full py-3 bg-primary-600 text-white rounded-lg font-medium transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary-200 hover:bg-primary-700 hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="animate-spin" size={20} />
-                    Entrando...
-                  </>
-                ) : (
-                  'Acessar Portal'
-                )}
-              </button>
-            </form>
-
-            <div className="mt-8 pt-6 border-t border-gray-100">
-              <p className="text-sm text-gray-500 text-center mb-3">
-                Sua empresa ainda não tem cadastro?
+          <Card className="p-8 shadow-lg border border-gray-100 rounded-2xl">
+            <CardHeader className="p-0 mb-8">
+              <h2 className="text-2xl font-bold text-gray-900">Bem-vindo de volta</h2>
+              <p className="text-gray-500 text-sm">
+                Acesse sua conta para gerenciar operações logísticas
               </p>
-              <button
-                onClick={() => setView('register')}
-                className="w-full py-3 border-2 border-gray-200 text-gray-700 rounded-lg font-medium hover:border-primary-500 hover:text-primary-600 hover:bg-primary-50 transition-all"
-              >
-                Cadastrar Fornecedor
-              </button>
-            </div>
+            </CardHeader>
 
-            {/* Demo Section */}
-            <div className="mt-6 pt-6 border-t border-gray-100">
+            <CardContent className="p-0">
+
+              {/* ALERTA DE ERRO */}
+              {error && (
+                <Alert variant="destructive" className="mb-6 animate-in fade-in slide-in-from-top-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Erro no login</AlertTitle>
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              <form onSubmit={handleLogin} className="space-y-5">
+
+                {/* EMAIL */}
+                <div className="space-y-2">
+                  <Label>E-mail</Label>
+                  <Input
+                    type="email"
+                    placeholder="seu@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+
+                {/* SENHA */}
+                <div className="space-y-2">
+                  <Label>Senha</Label>
+
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="pr-10"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      {showPassword ? (
+                        <EyeOff size={18} />
+                      ) : (
+                        <Eye size={18} />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex justify-end">
+                  <Button variant="link" className="p-0 text-primary-600 text-sm">
+                    Esqueceu sua senha?
+                  </Button>
+                </div>
+
+                {/* BOTÃO LOGIN */}
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full py-3 text-white shadow-lg shadow-primary-200"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="animate-spin mr-2" size={18} />
+                      Entrando...
+                    </>
+                  ) : (
+                    "Acessar Portal"
+                  )}
+                </Button>
+              </form>
+
+              {/* DEMO */}
+              <Separator className="my-6" />
+
               <p className="text-xs text-gray-400 uppercase font-semibold text-center mb-3 tracking-wider">
                 Para demonstração
               </p>
-              <div className="flex gap-2"> {/* Use flex para colocar lado a lado */}
-                <button
-                  onClick={prefillSupplier}
-                  className="w-1/2 text-xs py-2.5 px-3 bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-700 rounded-lg border border-gray-200 hover:border-blue-300 transition-all"
-                >
-                  Demo Fornecedor
-                </button>
-                <button
+
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full border-purple-300 text-purple-600 hover:bg-purple-50"
                   onClick={prefillAdmin}
-                  className="w-1/2 text-xs py-2.5 px-3 bg-purple-50 hover:bg-purple-100 text-purple-600 hover:text-purple-700 rounded-lg border border-purple-200 hover:border-purple-300 transition-all"
                 >
                   Demo Admin
-                </button>
+                </Button>
               </div>
-            </div>
-          </div>
+
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

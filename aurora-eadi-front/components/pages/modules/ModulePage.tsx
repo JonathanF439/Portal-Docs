@@ -15,21 +15,21 @@ export const ModulesPage: React.FC = () => {
     {
       icon: Truck,
       title: 'Logística & Operações',
-      description: 'Gestão completa de armazém alfandegado (WMS), monitoramento de frota e processos de importação/exportação.',
+      description: 'Monitoramento de frota e processos de importação/exportação.',
       route: '/logistics',
       roles: [UserRole.ADMIN]
     },
     {
-      icon: FileText,
+      icon: ShoppingCart,
       title: 'Faturamento',
-      description: 'Emissão de notas fiscais, controle de contas a receber, fluxo de caixa e relatórios financeiros consolidados.',
+      description: 'Emissão de notas fiscais, relatório.',
       route: '/billing',
       roles: [UserRole.ADMIN]
     },
     {
-      icon: ShoppingCart,
-      title: 'Gestão de Compras',
-      description: 'Homologação de fornecedores, cotações, pedidos de compra e controle de estoque de materiais de uso e consumo.',
+      icon: FileText,
+      title: 'Gestão de Documentos',
+      description: 'Envio e organização de documentos.',
       route: currentUser?.role === UserRole.ADMIN ? '/admin' : '/supplier',
       roles: [UserRole.ADMIN, UserRole.SUPPLIER]
     }

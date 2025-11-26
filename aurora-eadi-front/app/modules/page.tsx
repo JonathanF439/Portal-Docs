@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthContext } from '@/context/AuthContext'
 import { ModulesPage } from '@/components/pages/modules/ModulePage'
+import { Header } from '@/components/layout/Header'
 
 export default function Modules() {
   const { currentUser, isLoading } = useAuthContext()
@@ -24,5 +25,12 @@ export default function Modules() {
     )
   }
 
-  return <ModulesPage />
+  return (
+    <>
+      <Header />
+
+      <ModulesPage />
+
+    </>
+  );
 }
