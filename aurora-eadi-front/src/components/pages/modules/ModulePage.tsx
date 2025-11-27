@@ -23,21 +23,21 @@ export function ModulesPage(){
       icon: ShoppingCart,
       title: 'Faturamento',
       description: 'Emissão de notas fiscais, relatório.',
-      route: '/billing',
+      route: '/faturamento',
       roles: [UserRole.ADMIN]
     },
     {
       icon: FileText,
       title: 'Gestão de Documentos',
       description: 'Envio e organização de documentos.',
-      route: currentUser?.role === UserRole.ADMIN ? '/permission' : '/supplier',
+      route: '/documentos',
       roles: [UserRole.ADMIN, UserRole.SUPPLIER]
     },
      {
       icon: FileText,
       title: 'Permissões',
       description: 'Criar e permitir acesso aos usuários',
-      route: '/admin',
+      route: '/permission',
       roles: [UserRole.ADMIN]
     }
   ];

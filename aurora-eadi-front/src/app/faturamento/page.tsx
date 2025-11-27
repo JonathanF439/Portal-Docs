@@ -4,8 +4,9 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthContext } from '@/src/context/AuthContext'
 import { Layout } from '@/src/components/layout/Layout'
-import { AdminDashboard } from '@/src/components/pages/admin/Dashboard'
+import { AdminDashboard } from '@/src/components/pages/documentos/Dashboard'
 import { UserRole } from '@/src/types'
+import { FaturamentoDashboard } from '@/src/components/pages/faturamento/Dashboard'
 
 export default function AdminPage() {
   const { currentUser, isLoading } = useAuthContext()
@@ -35,7 +36,7 @@ export default function AdminPage() {
 
   return (
     <Layout>
-      <AdminDashboard />
+      <FaturamentoDashboard />
     </Layout>
   )
 }

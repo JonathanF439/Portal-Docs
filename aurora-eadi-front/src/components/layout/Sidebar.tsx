@@ -95,7 +95,7 @@ export const Sidebar: React.FC = () => {
 
             {currentUser.role === UserRole.ADMIN && (
               <SidebarItem
-                label="Gestão de Compras"
+                label="Gestão de Documentos"
                 icon={<Shield size={18} />}
                 path="/admin"
                 active={isActive('/admin')}

@@ -6,7 +6,7 @@ import { Badge } from '@/src/components/ui/Badge';
 import { DocumentStatus, Document, CompanyStatus } from '@/src/types';
 import { Search, Eye, Check, X, FileText, Download, Building2, User as UserIcon, AlertCircle, Users, UserCheck, Clock, Loader2 } from 'lucide-react';
 
-export const AdminDashboard: React.FC = () => {
+export function AdminDashboard() {
   const { currentUser } = useAuthContext();
   
   const { data: suppliers = [] } = useSuppliers();
