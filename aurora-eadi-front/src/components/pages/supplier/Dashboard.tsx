@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useAuthContext } from '@/src/context/AuthContext';
-import { useDocuments, useUploadDocument } from '@/src/hooks/useDocuments';
+import { useAuthContext } from '@/context/AuthContext';
+import { useDocuments, useUploadDocument } from '@/hooks/useDocuments';
 import { UploadCloud, FileText, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
-import { Badge } from '@/src/components/ui/Badge';
-import { DocumentStatus } from '@/src/types';
+import { Badge } from '@/components/ui/Badge';
+import { DocumentStatus } from '@/types';
 
 export function SupplierDashboard() {
   const { currentUser } = useAuthContext();

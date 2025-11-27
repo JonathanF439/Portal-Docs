@@ -1,32 +1,51 @@
 'use client'
+
 import React from 'react';
-import { useRouter, usePathname } from 'next/navigation';
 import { useAuthContext } from '../../context/AuthContext';
-import { LogOut, FileText, Shield, User as UserIcon, Home } from 'lucide-react';
-import { UserRole } from '../../types';
-import { Logo } from '../ui/Logo';
-import { Sidebar } from './Sidebar';
+import { Sidebar } from '@/components/layout/Sidebar';
 
-export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { currentUser, logoutUser } = useAuthContext();
-  const router = useRouter();
-  const pathname = usePathname();
+interface LayoutProps {
+  children: React.ReactNode;
+  className?: string;
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl' | 'full';
+  showSidebar?: boolean;
+}
 
-  if (!currentUser) return <>{children}</>;
+const maxWidthClasses = {
+  sm: 'max-w-sm',
+  md: 'max-w-md',
+  lg: 'max-w-lg',
+  xl: 'max-w-xl',
+  '2xl': 'max-w-2xl',
+  '3xl': 'max-w-3xl',
+  '4xl': 'max-w-4xl',
+  '5xl': 'max-w-5xl',
+  '6xl': 'max-w-6xl',
+  '7xl': 'max-w-7xl',
+  full: 'max-w-full',
+};
 
-  const handleLogout = () => {
-    logoutUser();
-    router.push('/');
-  };
+export const Layout: React.FC<LayoutProps> = ({ 
+  children, 
+  className = '',
+  maxWidth = '7xl',
+  showSidebar = true,
+}) => {
+  const { currentUser } = useAuthContext();
 
-  const isActive = (path: string) => pathname === path;
+  // Se não há usuário logado, renderiza apenas o children (ex: página de login)
+  if (!currentUser) {
+    return <>{children}</>;
+  }
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gray-50">
-      <Sidebar />
+      {/* Sidebar - Renderizado condicionalmente */}
+      {showSidebar && <Sidebar />}
 
-      <main className="flex-1 p-4 md:p-8 overflow-y-auto h-screen">
-        <div className="max-w-7xl mx-auto">
+      {/* Main Content */}
+      <main className={`flex-1 p-4 md:p-8 overflow-y-auto h-screen ${className}`}>
+        <div className={`${maxWidthClasses[maxWidth]} mx-auto`}>
           {children}
         </div>
       </main>

@@ -2,10 +2,10 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuthContext } from '@/src/context/AuthContext'
-import { Layout } from '@/src/components/layout/Layout'
-import { SupplierDashboard } from '@/src/components/pages/supplier/Dashboard'
-import { UserRole } from '@/src/types'
+import { useAuthContext } from '@/context/AuthContext'
+import { Layout } from '@/components/layout/Layout'
+import { SupplierDashboard } from '@/components/pages/supplier/Dashboard'
+import { UserRole } from '@/types'
 
 export default function SupplierPage() {
   const { currentUser, isLoading } = useAuthContext()

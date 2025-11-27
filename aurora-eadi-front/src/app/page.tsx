@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuthContext } from '@/src/context/AuthContext'
-import { Login } from '@/src/components/pages/Login'
-import { Register } from '@/src/components/pages/Register'
+import { useAuthContext } from '@/context/AuthContext'
+import { Login } from '@/components/pages/Login'
+import { Register } from '@/components/pages/Register'
 
 
 export default function HomePage() {
@@ -41,5 +41,5 @@ export default function HomePage() {
     return <Register setView={setView} />
   }
 
-  return <Login setView={setView} />
+  return <Login />
 }

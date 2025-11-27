@@ -2,11 +2,10 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuthContext } from '@/src/context/AuthContext'
-import { Layout } from '@/src/components/layout/Layout'
-import { AdminDashboard } from '@/src/components/pages/documentos/Dashboard'
-import { UserRole } from '@/src/types'
-import { FaturamentoDashboard } from '@/src/components/pages/faturamento/Dashboard'
+import { useAuthContext } from '@/context/AuthContext'
+import { Layout } from '@/components/layout/Layout'
+import { AdminDashboard } from '@/components/pages/documentos/Dashboard'
+import { UserRole } from '@/types'
 
 export default function AdminPage() {
   const { currentUser, isLoading } = useAuthContext()

@@ -2,18 +2,17 @@
 
 import React from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useAuthContext } from '@/src/context/AuthContext';
-import { Button } from '@/src/components/ui/button';
-import { ScrollArea } from '@/src/components/ui/scroll-area';
-
-import { LogOut, Home, Shield, FileText, User as UserIcon } from 'lucide-react';
-import { UserRole } from '@/src/types';
-import { Logo } from '@/src/components/ui/Logo';
+import { useAuthContext } from '@/context/AuthContext';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { LogOut, User as UserIcon } from 'lucide-react';
+import { UserRole } from '@/types';
+import { Logo } from '@/components/ui/Logo';
+import { getNavigationByPath } from '@/config/navigation';
 
 interface SidebarItemProps {
   label: string;
   icon: React.ReactNode;
-  path: string;
   active: boolean;
   onClick: () => void;
 }
@@ -21,19 +20,11 @@ interface SidebarItemProps {
 export function SidebarItem({ label, icon, active, onClick }: SidebarItemProps) {
   return (
     <Button
-
       variant={active ? "secondary" : "ghost"}
       className={`
         w-full justify-start gap-3 
-        
-        // Cores padrão (Não Ativo): Texto claro, Hover sutil no fundo escuro
         text-slate-300 hover:bg-slate-800 hover:text-white
-
-        ${active ? 
-
-          "bg-primary-600 text-white hover:bg-primary-700" 
-          : ""
-        }
+        ${active ? "bg-primary-600 text-white hover:bg-primary-700" : ""}
       `}
       onClick={onClick}
     >
@@ -41,14 +32,25 @@ export function SidebarItem({ label, icon, active, onClick }: SidebarItemProps) 
       {label}
     </Button>
   );
-};
+}
 
-export const Sidebar: React.FC = () => {
+interface SidebarProps {
+  className?: string;
+  showUserInfo?: boolean;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ 
+  className = "", 
+  showUserInfo = true 
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   const { currentUser, logoutUser } = useAuthContext();
 
   if (!currentUser) return null;
+
+  // 🎯 Obtém os itens de navegação baseado no PATH ATUAL
+  const navigationItems = getNavigationByPath(pathname);
 
   const isActive = (path: string) => pathname === path;
 
@@ -57,65 +59,55 @@ export const Sidebar: React.FC = () => {
     router.push('/');
   };
 
+  const getRoleLabel = (role: UserRole) => {
+    return role === UserRole.ADMIN ? 'Administrador' : 'Fornecedor';
+  };
+
   return (
-
-    <div className="w-full md:w-64 bg-slate-900 border-b md:border-r border-slate-700 flex flex-col">
-
+    <div className={`w-full md:w-64 bg-slate-900 border-b md:border-r border-slate-700 flex flex-col ${className}`}>
+      {/* Logo */}
       <div className="p-6 flex items-center justify-center md:justify-start border-b border-slate-800">
         <Logo size="md" />
       </div>
 
       <ScrollArea className="flex-1">
         <div className="p-4">
-
-          <div className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg mb-6">
-            <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-primary-400">
-              <UserIcon size={20} />
+          {/* User Info */}
+          {showUserInfo && (
+            <div className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg mb-6">
+              <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-primary-400">
+                <UserIcon size={20} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-white truncate">
+                  {currentUser.name}
+                </p>
+                <p className="text-xs text-slate-400 capitalize">
+                  {getRoleLabel(currentUser.role)}
+                </p>
+              </div>
             </div>
-            <div>
+          )}
 
-              <p className="text-sm font-medium text-white truncate">{currentUser.name}</p>
-
-              <p className="text-xs text-slate-400 capitalize">
-                {currentUser.role === UserRole.ADMIN ? 'Administrador' : 'Fornecedor'}
-              </p>
-            </div>
-          </div>
-
-
+          {/* Navigation Items - Dinâmicos baseado no PATH */}
           <nav className="space-y-1">
-
-            <SidebarItem
-              label="Home"
-              icon={<Home size={18} />}
-              path="/modules"
-              active={isActive('/modules')}
-              onClick={() => router.push('/modules')}
-            />
-
-            {currentUser.role === UserRole.ADMIN && (
-              <SidebarItem
-                label="Gestão de Documentos"
-                icon={<Shield size={18} />}
-                path="/admin"
-                active={isActive('/admin')}
-                onClick={() => router.push('/admin')}
-              />
-            )}
-
-            {currentUser.role === UserRole.SUPPLIER && (
-              <SidebarItem
-                label="Meus Documentos"
-                icon={<FileText size={18} />}
-                path="/supplier"
-                active={isActive('/supplier')}
-                onClick={() => router.push('/supplier')}
-              />
-            )}
+            {navigationItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <SidebarItem
+                  key={item.path}
+                  label={item.label}
+                  icon={<IconComponent size={18} />}
+                  active={isActive(item.path)}
+                  onClick={() => router.push(item.path)}
+                />
+              );
+            })}
           </nav>
         </div>
       </ScrollArea>
 
+      {/* Logout Button */}
       <div className="p-4 border-t border-slate-800">
         <Button
           variant="ghost"

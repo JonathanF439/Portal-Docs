@@ -2,7 +2,7 @@
 import React from 'react';
 import { LogOut } from 'lucide-react';
 import { Logo } from '../ui/Logo';
-import { useAuthContext } from '@/src/context/AuthContext';
+import { useAuthContext } from '@/context/AuthContext';
 
 interface HeaderProps {
   pageTitle?: string; 

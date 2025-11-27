@@ -6,12 +6,12 @@ import { UserRole } from '../../types';
 import { Loader2, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { Logo } from '../ui/Logo';
 
-import { Card, CardHeader, CardContent } from "@/src/components/ui/card";
-import { Input } from "@/src/components/ui/input";
-import { Button } from "@/src/components/ui/button";
-import { Label } from "@/src/components/ui/label";
-import { Alert, AlertTitle, AlertDescription } from "@/src/components/ui/alert";
-import { Separator } from "@/src/components/ui/separator";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Separator } from "@/components/ui/separator";
 
 export function Login(){
   const { mutate: login, isPending: isLoading } = useLogin();
