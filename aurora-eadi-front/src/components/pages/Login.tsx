@@ -13,11 +13,7 @@ import { Label } from "@/src/components/ui/label";
 import { Alert, AlertTitle, AlertDescription } from "@/src/components/ui/alert";
 import { Separator } from "@/src/components/ui/separator";
 
-interface LoginProps {
-  setView: (v: 'login' | 'register') => void;
-}
-
-export const Login: React.FC<LoginProps> = ({ setView }) => {
+export function Login(){
   const { mutate: login, isPending: isLoading } = useLogin();
 
   const [email, setEmail] = useState('');

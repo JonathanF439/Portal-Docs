@@ -7,7 +7,7 @@ import { ModuleCard } from './ModuleCard';
 import { Truck, FileText, ShoppingCart } from 'lucide-react';
 import { UserRole } from '@/src/types/'
 
-export const ModulesPage: React.FC = () => {
+export function ModulesPage(){
   const router = useRouter();
   const { currentUser } = useAuthContext();
 
@@ -30,8 +30,15 @@ export const ModulesPage: React.FC = () => {
       icon: FileText,
       title: 'Gestão de Documentos',
       description: 'Envio e organização de documentos.',
-      route: currentUser?.role === UserRole.ADMIN ? '/admin' : '/supplier',
+      route: currentUser?.role === UserRole.ADMIN ? '/permission' : '/supplier',
       roles: [UserRole.ADMIN, UserRole.SUPPLIER]
+    },
+     {
+      icon: FileText,
+      title: 'Permissões',
+      description: 'Criar e permitir acesso aos usuários',
+      route: '/admin',
+      roles: [UserRole.ADMIN]
     }
   ];
 

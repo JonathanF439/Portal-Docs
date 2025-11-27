@@ -18,7 +18,7 @@ interface SidebarItemProps {
   onClick: () => void;
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = ({ label, icon, active, onClick }) => {
+export function SidebarItem({ label, icon, active, onClick }: SidebarItemProps) {
   return (
     <Button
 

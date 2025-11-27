@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useAuthContext } from '@/context/AuthContext';
-import { useDocuments, useUploadDocument } from '@/hooks/useDocuments';
+import { useAuthContext } from '@/src/context/AuthContext';
+import { useDocuments, useUploadDocument } from '@/src/hooks/useDocuments';
 import { UploadCloud, FileText, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
-import { Badge } from '@/components/ui/Badge';
-import { DocumentStatus } from '@/types';
+import { Badge } from '@/src/components/ui/Badge';
+import { DocumentStatus } from '@/src/types';
 
-export const SupplierDashboard: React.FC = () => {
+export function SupplierDashboard() {
   const { currentUser } = useAuthContext();
   const { data: documents = [], isLoading: isLoadingDocs } = useDocuments(currentUser);
   const { mutate: upload, isPending: isUploading } = useUploadDocument();
