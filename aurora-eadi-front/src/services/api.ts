@@ -1,4 +1,4 @@
-import { User, Company, Document, UserRole, DocumentStatus, CompanyStatus, CreateCompanyDTO, CreateUserDTO } from '@/types'
+import { User, Company, Document, UserRole, DocumentStatus, CompanyStatus, CreateCompanyDTO, CreateUserDTO } from '@/src/types'
 
 /**
  * SERVICE LAYER - PREPARADO PARA NEXT.JS

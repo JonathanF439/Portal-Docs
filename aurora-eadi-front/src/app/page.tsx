@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuthContext } from '@/context/AuthContext'
-import { Login } from '@/components/pages/Login'
-import { Register } from '@/components/pages/Register'
-import { UserRole } from '@/types'
+import { useAuthContext } from '@/src/context/AuthContext'
+import { Login } from '@/src/components/pages/Login'
+import { Register } from '@/src/components/pages/Register'
+
 
 export default function HomePage() {
   const { currentUser, isLoading } = useAuthContext()

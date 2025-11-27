@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 /* Ocultar indicador de build do Next.js */
 #__next-build-watcher, 
 /* Ocultar Vercel Toolbar */

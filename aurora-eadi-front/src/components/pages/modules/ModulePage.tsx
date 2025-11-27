@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthContext } from '@/context/AuthContext';
+import { useAuthContext } from '@/src/context/AuthContext';
 import { ModuleCard } from './ModuleCard';
 import { Truck, FileText, ShoppingCart } from 'lucide-react';
-import { UserRole } from '@/types/'
+import { UserRole } from '@/src/types/'
 
 export const ModulesPage: React.FC = () => {
   const router = useRouter();

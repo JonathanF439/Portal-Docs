@@ -2,22 +2,22 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuthContext } from '@/context/AuthContext'
-import { Layout } from '@/components/layout/Layout'
-import { AdminDashboard } from '@/components/pages/admin/Dashboard'
-import { UserRole } from '@/types'
+import { useAuthContext } from '@/src/context/AuthContext'
+import { Layout } from '@/src/components/layout/Layout'
+import { SupplierDashboard } from '@/src/components/pages/supplier/Dashboard'
+import { UserRole } from '@/src/types'
 
-export default function AdminPage() {
+export default function SupplierPage() {
   const { currentUser, isLoading } = useAuthContext()
   const router = useRouter()
 
-  useEffect(() => { 
+  useEffect(() => {
     if (isLoading) return
     
     if (!currentUser) {
       router.push('/')
-    } else if (currentUser.role !== UserRole.ADMIN) {
-      router.push('/supplier')
+    } else if (currentUser.role !== UserRole.SUPPLIER) {
+      router.push('/admin')
     }
   }, [currentUser, isLoading, router])
 
@@ -29,13 +29,13 @@ export default function AdminPage() {
     )
   }
 
-  if (!currentUser || currentUser.role !== UserRole.ADMIN) {
+  if (!currentUser || currentUser.role !== UserRole.SUPPLIER) {
     return null
   }
 
   return (
     <Layout>
-      <AdminDashboard />
+      <SupplierDashboard />
     </Layout>
   )
 }

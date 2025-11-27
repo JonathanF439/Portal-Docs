@@ -1,37 +1,30 @@
 import React, { useState } from 'react';
-import { useAuthContext } from '../../../context/AuthContext';
-import { useSuppliers, useUpdateCompanyStatus } from '../../../hooks/useSuppliers';
-import { useDocuments, useUpdateDocumentStatus } from '../../../hooks/useDocuments';
-import { Badge } from '../../ui/Badge';
-import { DocumentStatus, Document, CompanyStatus } from '../../../types';
+import { useAuthContext } from '@/src/context/AuthContext';
+import { useSuppliers, useUpdateCompanyStatus } from '@/src/hooks/useSuppliers';
+import { useDocuments, useUpdateDocumentStatus } from '@/src/hooks/useDocuments';
+import { Badge } from '@/src/components/ui/Badge';
+import { DocumentStatus, Document, CompanyStatus } from '@/src/types';
 import { Search, Eye, Check, X, FileText, Download, Building2, User as UserIcon, AlertCircle, Users, UserCheck, Clock, Loader2 } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
   const { currentUser } = useAuthContext();
   
-  // Queries
   const { data: suppliers = [] } = useSuppliers();
   const { data: documents = [] } = useDocuments(currentUser);
   
-  // Mutations
   const { mutate: updateCompany, isPending: isUpdatingCompany } = useUpdateCompanyStatus();
   const { mutate: updateDoc, isPending: isUpdatingDoc } = useUpdateDocumentStatus();
   
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSupplierId, setSelectedSupplierId] = useState<string | null>(null);
   
-  // Rejection State
   const [rejectingDoc, setRejectingDoc] = useState<Document | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
 
-  // --- Derived State & Helpers ---
-
-  // 1. Statistics
   const pendingCompanies = suppliers.filter(s => s.company.status === CompanyStatus.PENDING).length;
   const activeCompanies = suppliers.filter(s => s.company.status === CompanyStatus.ACTIVE).length;
   const totalCompanies = suppliers.length;
 
-  // 2. Filter Suppliers
   const filteredSuppliers = suppliers.filter(({ company, responsible }) => {
     const term = searchTerm.toLowerCase();
     return (
@@ -41,7 +34,6 @@ export const AdminDashboard: React.FC = () => {
     );
   });
 
-  // 3. Get Data for Selected Modal
   const selectedData = selectedSupplierId 
     ? suppliers.find(s => s.company.id === selectedSupplierId)
     : null;
@@ -50,14 +42,11 @@ export const AdminDashboard: React.FC = () => {
     ? documents.filter(d => d.companyId === selectedSupplierId)
     : [];
 
-  // 4. Calculate Document Status for Table
   const getDocStats = (companyId: string) => {
     const docs = documents.filter(d => d.companyId === companyId);
     const pending = docs.filter(d => d.status === DocumentStatus.PENDING).length;
     return { total: docs.length, pending, hasPending: pending > 0 };
   };
-
-  // --- Handlers ---
 
   const handleApprove = (doc: Document) => {
     if (window.confirm(`Aprovar documento "${doc.name}"?`)) {
@@ -83,13 +72,11 @@ export const AdminDashboard: React.FC = () => {
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       
-      {/* Header */}
       <header>
         <h1 className="text-2xl font-bold text-gray-900">Painel Administrativo</h1>
         <p className="text-gray-500">Gerencie o acesso das empresas e modere documentos.</p>
       </header>
 
-      {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4">
           <div className="p-3 bg-blue-100 text-blue-600 rounded-lg">
@@ -120,7 +107,6 @@ export const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Filter */}
       <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
@@ -134,7 +120,6 @@ export const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Table: Supplier List */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <table className="w-full text-left text-sm">
           <thead className="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200">
@@ -227,7 +212,6 @@ export const AdminDashboard: React.FC = () => {
         </table>
       </div>
 
-      {/* Modal: Document Details */}
       {selectedData && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedSupplierId(null)} />
@@ -261,7 +245,6 @@ export const AdminDashboard: React.FC = () => {
               </button>
             </div>
 
-            {/* Body */}
             <div className="flex-1 overflow-y-auto p-6 bg-gray-50/50">
               {selectedData.company.status === CompanyStatus.PENDING && (
                 <div className="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-lg flex items-center justify-between">
@@ -371,7 +354,6 @@ export const AdminDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Modal: Rejection Reason Input */}
       {rejectingDoc && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/20 backdrop-blur-[2px] animate-in fade-in">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 animate-in zoom-in-95 duration-200">

@@ -2,13 +2,13 @@
 
 import React from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useAuthContext } from '@/context/AuthContext';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { useAuthContext } from '@/src/context/AuthContext';
+import { Button } from '@/src/components/ui/button';
+import { ScrollArea } from '@/src/components/ui/scroll-area';
 
 import { LogOut, Home, Shield, FileText, User as UserIcon } from 'lucide-react';
-import { UserRole } from '@/types';
-import { Logo } from '@/components/ui/Logo';
+import { UserRole } from '@/src/types';
+import { Logo } from '@/src/components/ui/Logo';
 
 interface SidebarItemProps {
   label: string;
