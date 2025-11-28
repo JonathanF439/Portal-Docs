@@ -23,7 +23,7 @@ export const Header: React.FC<HeaderProps> = ({ pageTitle = 'Módulos' }) => {
       <div className="flex justify-between items-center max-w-full mx-auto">
         
         <div className="flex items-center gap-4">
-          <Logo size="sm" /> 
+          <Logo src='/logo_principal.png' size="sm" /> 
           <h1 className="text-xl font-semibold text-gray-800 hidden md:block"></h1>
         </div>
         

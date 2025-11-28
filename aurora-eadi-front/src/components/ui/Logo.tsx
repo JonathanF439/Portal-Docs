@@ -5,9 +5,10 @@ import Image from 'next/image';
 interface LogoProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg';
+  src: string
 }
 
-export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
+export function Logo({ className = '', size = 'md', src = '' }: LogoProps) {
   
   const dimensions = {
     sm: { width: 120, height: 40 },
@@ -20,7 +21,7 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
   return (
     <div className={`relative ${className}`}>
       <Image
-        src="/logo_principal.png" 
+        src={src} 
         alt="Aurora EADI Logo"
         width={width}
         height={height}

@@ -67,7 +67,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <div className={`w-full md:w-64 bg-slate-900 border-b md:border-r border-slate-700 flex flex-col ${className}`}>
       {/* Logo */}
       <div className="p-6 flex items-center justify-center md:justify-start border-b border-slate-800">
-        <Logo size="md" />
+        <Logo src='/logo_principal.png' size="md" />
       </div>
 
       <ScrollArea className="flex-1">
