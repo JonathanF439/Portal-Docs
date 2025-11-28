@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import {
   Table,
   TableHeader,
@@ -11,15 +12,31 @@ import {
 import { Eye } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 import { FaturamentoPost } from "@/services/faturamento/type/type_faturamentoCutOff";
 
 interface Props {
   data: FaturamentoPost[];
   isLoading: boolean;
+  itemsPerPage?: number; // opcional, padrão 5
 }
 
-export function FaturamentoTable({ data, isLoading }: Props) {
-  const skeletonRows = Array.from({ length: 5 });
+export function FaturamentoTable({ data, isLoading, itemsPerPage = 5 }: Props) {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = useMemo(() => {
+    return Math.ceil(data.length / itemsPerPage);
+  }, [data.length, itemsPerPage]);
+
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return data.slice(start, start + itemsPerPage);
+  }, [currentPage, data, itemsPerPage]);
+
+  const skeletonRows = Array.from({ length: itemsPerPage });
+
+  const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
   return (
     <Card>
@@ -57,7 +74,7 @@ export function FaturamentoTable({ data, isLoading }: Props) {
                       </TableCell>
                     </TableRow>
                   ))
-                : data.map((item) => (
+                : paginatedData.map((item) => (
                     <TableRow key={item.id} className="border-t">
                       <TableCell className="p-3">{item.id}</TableCell>
                       <TableCell className="p-3">{item.userId}</TableCell>
@@ -70,6 +87,21 @@ export function FaturamentoTable({ data, isLoading }: Props) {
             </TableBody>
           </Table>
         </div>
+
+        {/* Paginação */}
+        {!isLoading && totalPages > 1 && (
+          <div className="flex justify-end items-center gap-2 mt-4">
+            <Button onClick={handlePrev} disabled={currentPage === 1} variant="outline">
+              Anterior
+            </Button>
+            <span className="text-sm text-gray-600">
+              Página {currentPage} de {totalPages}
+            </span>
+            <Button onClick={handleNext} disabled={currentPage === totalPages} variant="outline">
+              Próxima
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
