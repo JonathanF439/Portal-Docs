@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthContext } from '@/context/AuthContext'
 import { Layout } from '@/components/layout/Layout'
-import { AdminDashboard } from '@/components/pages/documentos/Dashboard'
 import { UserRole } from '@/types'
 import { FaturamentoDashboard } from '@/components/pages/faturamento/Dashboard'
 
